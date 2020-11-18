@@ -1,0 +1,51 @@
+{
+  "name": "bill-soul-koa-server",
+  "version": "0.1.0",
+  "private": true,
+  "_moduleAliases": {
+    "@": ""
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon  -e  ts,tsx  --exec ts-node  app.ts",
+    "debugger": "cross-env NODE_ENV=development nodemon  -e  ts,tsx  --exec node --inspect -r ts-node/register app.ts",
+    "prd": "pm2 restart dist/app.js --name=bill-soul-server",
+    "pstart": "pm2 start dist/app.js --name=bill-soul-server",
+    "start": "cross-env NODE_ENV=production  ts-node app.ts",
+    "build": "tsc && node ./config/copy.js"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "debug": "^2.6.3",
+    "koa": "^2.2.0",
+    "koa-bodyparser": "^3.2.0",
+    "koa-convert": "^1.2.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^2.0.1",
+    "koa-onerror": "^1.2.1",
+    "koa-router": "^7.1.1",
+    "koa-static": "^3.0.0",
+    "koa-views": "^5.2.1",
+    "log4js": "^5.0.0",
+    "module-alias": "^2.2.2",
+    "moment": "^2.24.0",
+    "mysql": "^2.17.1",
+    "pug": "^2.0.0-rc.1",
+    "reflect-metadata": "^0.1.13",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/koa-router": "^7.0.40",
+    "@types/node": "^12.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^9.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "nodemon": "^1.8.1",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5",
+    "typescript-eslint-parser": "^22.0.0"
+  }
+}
