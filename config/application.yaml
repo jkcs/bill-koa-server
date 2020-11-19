@@ -3,8 +3,9 @@ koa:
   prefix: "/api"
 
 db:
-  host: "localhost:3306"
-  database: "where_soul"
+  host: "localhost"
+  port: 3306
+  database: "test_database"
   username: "root"
   password: "123456"
 

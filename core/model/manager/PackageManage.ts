@@ -1,6 +1,6 @@
 import { Value } from '../../decorator/YamlDecorator'
 import { Manger } from '../../decorator/ContainerDecorator'
-import Log from "../log/Log"
+import Log from '../log/Log'
 const glob = require('glob')
 const { resolve } = require('path')
 

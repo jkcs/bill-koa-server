@@ -1,3 +1,6 @@
+import 'reflect-metadata'
+const cuid = require('cuid')
+
 /**
  * bean容器
  */
@@ -10,10 +13,13 @@ export default class BeanContainer {
   }
 
   createBean<T> (className: string, source: T): any {
-    this.map.set(className, new (<any>source)())
+    const beanInstance = new (<any>source)()
+    Reflect.defineMetadata(`uid`, cuid(), beanInstance)
+    this.map.set(className, beanInstance)
   }
 
   updateBean<T> (className: string, source: T): any {
+    if (source != null) Reflect.defineMetadata(`uid`, cuid(), source)
     this.map.set(className, source)
   }
 

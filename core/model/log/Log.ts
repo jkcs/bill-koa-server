@@ -21,31 +21,38 @@ configure({
   }
 })
 const logger = getLogger()
-
 export default class Log {
   static log4: any = logger
 
-  static e (...args: any) {
-    Log.log4.error(...args)
+  static jdbc (message: any) {
+    if (process.env.NODE_ENV === 'production') {
+      Log.log4.info(String(message))
+      return
+    }
+    Log.log4.debug(String(message))
   }
 
-  static w (...args: any) {
-    Log.log4.warn(...args)
+  static e (message: any, ...args: any[]) {
+    Log.log4.error(message, ...args)
   }
 
-  static d (...args: any) {
-    Log.log4.debug(...args)
+  static w (message: any, ...args: any[]) {
+    Log.log4.warn(message, ...args)
   }
 
-  static t (...args: any) {
-    Log.log4.trace(...args)
+  static d (message: any, ...args: any) {
+    Log.log4.debug(message, ...args)
   }
 
-  static i (...args: any) {
-    Log.log4.info(...args)
+  static t (message: any, ...args: any[]) {
+    Log.log4.trace(message, ...args)
   }
 
-  static f (...args: any) {
-    Log.log4.fatal(...args)
+  static i (message: any, ...args: any[]) {
+    Log.log4.info(message, ...args)
+  }
+
+  static f (message: any, ...args: any[]) {
+    Log.log4.fatal(message, ...args)
   }
 }

@@ -1,6 +1,7 @@
 import { Controller, Get, Post, RequestMapping } from '@/core/decorator/ControllerDecorator'
 import Log from '@/core/model/log/Log'
 import { BaseContext } from 'koa'
+import User from '../model/User'
 
 @Controller
 @RequestMapping()
