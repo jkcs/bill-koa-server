@@ -1,12 +1,9 @@
 import { DataTypes, Model } from 'sequelize'
 import sequelize from '@/src/sequelize'
-import Log from '@/core/model/log/Log'
-import Tag from '@/src/model/Tag'
 
 class User extends Model {
 }
 
-Log.d('user inject')
 User.init({
   id: {
     type: DataTypes.INTEGER,
@@ -14,25 +11,26 @@ User.init({
     primaryKey: true
   },
   username: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    comment: '用户名'
   },
   password: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    comment: '密码'
   },
-  avatarId: {
-    type: DataTypes.INTEGER
+  avatar: {
+    type: DataTypes.STRING(500),
+    comment: '用户头像地址'
   },
   gender: {
-    type: DataTypes.BOOLEAN
+    type: DataTypes.BOOLEAN,
+    comment: '性别 1 男 0 女'
   },
   loginName: {
-    type: DataTypes.STRING
-  },
-  usersSecurityId: {
-    type: DataTypes.INTEGER
+    type: DataTypes.STRING,
+    comment: '登录名',
+    unique: true
   }
 }, { sequelize })
-
-User.hasMany(Tag)
 
 export default User

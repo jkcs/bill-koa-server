@@ -9,11 +9,17 @@ const { resolve } = require('path')
 export default class PackageManage {
   @Value('package.scan')
   scanPackage: string
+  @Value('package.exclude')
+  excludePackage: string
 
   // 初始化扫描
   public initScan (rootDir: string) {
     Log.i('Start scanning packages')
-    const pattern = resolve(rootDir, this.scanPackage, './**/*.{js,ts}')
+    let pattern = resolve(rootDir, this.scanPackage)
+    if (this.excludePackage) {
+      pattern = resolve(pattern, `!(${this.excludePackage})`)
+    }
+    pattern = resolve(pattern, './**/**.{js,ts}')
     glob.sync(pattern)
       .forEach((item: any) => {
         require(item)

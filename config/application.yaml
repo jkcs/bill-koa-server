@@ -11,3 +11,4 @@ db:
 
 package:
   scan: "src"
+#  exclude: "model"

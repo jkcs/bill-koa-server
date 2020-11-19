@@ -1,11 +1,11 @@
 import { Sequelize } from 'sequelize'
 import Log from '@/core/model/log/Log'
 import YamlParse from '@/core/model/parse/YamlParse'
-const { resolve } = require('path')
+// const { resolve } = require('path')
+// const glob = require('glob')
 let sequelize: Sequelize = null
-const glob = require('glob')
 
-export default (function () {
+export default (function async () {
   if (sequelize) return sequelize
   const host: string = YamlParse.Instance.getValue('db.host')
   const port: number = YamlParse.Instance.getValue('db.port')
@@ -26,13 +26,9 @@ export default (function () {
   sequelize.authenticate()
     .then(r => {
       Log.i('MySQL connection succeeded')
-      const pattern = resolve(__dirname, 'model', './**/*.{js,ts}')
-      Log.i(`start sync ${database} tables...`)
-      glob.sync(pattern)
-        .forEach((item: any) => {
-          require(item).default.sync({ alter: true })
-        })
-      Log.i('sync tables finished')
+      const isProduction = process.env.NODE_ENV === 'production'
+      sequelize.sync({ alter: isProduction, force: !isProduction })
+      Log.i(`sync ${database} tables...`)
     }).catch(error => {
       Log.e(`Unable to connect to the database:${error}`)
     })
