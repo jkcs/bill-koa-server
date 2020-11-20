@@ -4,6 +4,7 @@ import { AutoWired } from '@/core/decorator/ContainerDecorator'
 import Result from '@/src/utils/Result'
 import { RouterContext } from 'koa-router'
 import User from '@/src/model/User'
+import { encrypt, hash } from '@/src/utils/Crypto'
 
 @Controller
 @RequestMapping('user')
@@ -13,39 +14,59 @@ export default class UserController {
 
   @Get('/:id')
   public async getUser (ctx: RouterContext) {
-    try {
-      const { id } = ctx.params
-      let user = await this.userService.getUserById(id)
-      ctx.body = Result.success(user)
-    } catch (e) {
-      ctx.body = Result.exception(e)
-    }
+    const { id } = ctx.params
+    let user = await this.userService.getUserById(id)
+    ctx.body = Result.success(user)
   }
 
   @Post('/save')
   public async saveOrUpdate (ctx: RouterContext) {
     const obj = ctx.request.body
     if (obj.isAdd) delete obj.hash
-    if (obj.isAdd && !obj.deviceCode) {
+    if (obj.isAdd && !obj.deviceId) {
       ctx.body = Result.argError()
       return
     }
-    const user:User = User.build(ctx.request.body)
-    await this.userService.addOrUpdateUser(user, obj.deviceCode)
+    if (obj.id) {
+      delete obj.password
+      delete obj.hash
+    }
+    let user:User = User.build({ ...ctx.request.body })
+    user = await this.userService.addOrUpdateUser(user, obj.deviceId)
     ctx.body = Result.success(user)
+  }
+
+  @Post('/saveAndLogin')
+  public async saveAndLogin (ctx: RouterContext) {
+    const { deviceId } = ctx.request.body
+    if (!deviceId) {
+      ctx.body = Result.argError()
+      return
+    }
+    let user:User = await this.userService.getUserByHash(hash(String(deviceId)))
+    if (user) {
+      ctx.body = Result.success(user, encrypt(String(user.id)))
+      return
+    }
+    user = await this.userService.addOrUpdateUser(User.build(), String(deviceId))
+    ctx.body = Result.success(user, user.hash)
   }
 
   @Post('/login')
   public async login (ctx: RouterContext) {
     const obj = ctx.request.body
+    let user = User.build()
     if (obj.deviceId) {
-      ctx.body = await this.userService.loginByDeviceCode(obj.deviceId)
+      user = await this.userService.loginByDeviceCode(String(obj.deviceId))
+    } else if (obj.username && obj.password) {
+      user = await this.userService.login(obj.username, obj.password)
+    } else {
+      ctx.body = Result.argError()
+    }
+    if (user) {
+      ctx.body = Result.success(user, encrypt(String(user.id)))
       return
     }
-    if (obj.username && obj.password) {
-      ctx.body = await this.userService.login(obj.username, obj.password)
-      return
-    }
-    ctx.body = Result.argError()
+    ctx.body = Result.error('用户名或密码错误')
   }
 }

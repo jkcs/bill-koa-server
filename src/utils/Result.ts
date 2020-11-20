@@ -23,8 +23,8 @@ export default class Result {
     return new Result(ErrorCode.ERROR, msg)
   }
 
-  public static exception (error: NodeJS.ErrnoException) {
-    return new Result(error.errno || ErrorCode.EXCEPTION, error.message)
+  public static exception (error: NodeJS.ErrnoException, message?: string): Result {
+    return new Result(error.errno || ErrorCode.EXCEPTION, message || error.message)
   }
 
   public static argError () {

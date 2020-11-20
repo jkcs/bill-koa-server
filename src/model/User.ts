@@ -3,8 +3,8 @@ import { DataTypes, Model } from 'sequelize'
 
 class User extends Model {
   public id: number
-  public createdAt: number
-  public updatedAt: number
+  public createdAt: Date
+  public updatedAt: Date
   public hash:string
   public username:string
   public password:string

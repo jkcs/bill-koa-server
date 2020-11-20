@@ -5,6 +5,7 @@ export default class Constants {
   public static ERROR = 0
   public static EXCEPTION = 3
   public static CAN_NOT_UPDATE_EXCEPTION = 4
+  public static BUSINESS_EXCEPTION = 5
   public static TOKEN_INVALID = 400
   // 未知异常
   public static UNKNOWN_EXCEPTION = 1

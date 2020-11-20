@@ -6,8 +6,8 @@
     "@": ""
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon  -e  ts,tsx  --exec ts-node  app.ts",
-    "debugger": "cross-env NODE_ENV=development nodemon  -e  ts,tsx  --exec node --inspect -r ts-node/register app.ts",
+    "dev": "cross-env NODE_ENV=development nodemon  -e  ts,tsx  --exec node --inspect -r ts-node/register app.ts",
+    "dev:no": "cross-env NODE_ENV=development node --inspect -r ts-node/register app.ts",
     "prd": "pm2 restart dist/app.js --name=bill-soul-server",
     "pstart": "pm2 start dist/app.js --name=bill-soul-server",
     "start": "cross-env NODE_ENV=production  ts-node app.ts",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/koa-bodyparser": "^4.3.0",
     "cross-env": "^7.0.2",
+    "crypto-js": "^4.0.0",
     "cuid": "^2.1.8",
     "debug": "^2.6.3",
     "koa": "^2.2.0",
@@ -35,13 +36,13 @@
     "pug": "^2.0.0-rc.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.3.5",
-    "sha.js": "^2.4.11",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/koa": "^2.11.6",
     "@types/koa-router": "^7.4.1",
     "@types/node": "^12.0.0",
+    "@types/sequelize": "^4.28.9",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.2",

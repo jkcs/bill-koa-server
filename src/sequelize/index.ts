@@ -18,15 +18,16 @@ export default (function async () {
     define: {
       freezeTableName: true
     },
+    timezone: '+08:00',
     logging: Log.jdbc
   })
 
   sequelize.authenticate()
     .then(r => {
       Log.i('MySQL connection succeeded')
-      const isProduction = process.env.NODE_ENV === 'production'
-      sequelize.sync({ alter: isProduction, force: !isProduction })
-      Log.i(`sync ${database} tables...`)
+      // const isProduction = process.env.NODE_ENV === 'production'
+      // sequelize.sync({ alter: isProduction, force: !isProduction })
+      // Log.i(`sync ${database} tables...`)
     }).catch(error => {
       Log.e(`Unable to connect to the database:${error}`)
     })

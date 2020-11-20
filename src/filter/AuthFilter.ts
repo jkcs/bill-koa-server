@@ -4,23 +4,22 @@ import UserService from '@/src/service/UserService'
 import User from '@/src/model/User'
 import UserRouter from '@/types/UserRouterContext'
 import TokenInvalidException from '@/src/exception/TokenInvalidException'
+import { decrypt } from '@/src/utils/Crypto'
 import UserRouterContext = UserRouter.UserRouterContext
 
-async function getUserInfo (token: string): Promise<User> {
+async function getUserInfo (token: string) {
   const userService = BeanContainer.Instance.getBean<UserService>(UserService.name)
-  return await userService.loginByDeviceCode(token)
+  return await userService.getUserById(Number(decrypt(token)))
 }
 
 module.exports = async (ctx: UserRouterContext) => {
   const token = ctx.request.headers[Constant.TOKEN]
   if (token) {
-    await getUserInfo(token)
-      .then(user => {
-        if (user.id) {
-          ctx.getUserInfo = (): User => user
-          return
-        }
-        throw new TokenInvalidException()
-      })
+    const user:User = await getUserInfo(token)
+    if (user.id) {
+      ctx.getUserInfo = (): User => user
+      return
+    }
+    throw new TokenInvalidException()
   }
 }
