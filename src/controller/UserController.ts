@@ -5,12 +5,17 @@ import Result from '@/src/utils/Result'
 import { RouterContext } from 'koa-router'
 import User from '@/src/model/User'
 import { encrypt, hash } from '@/src/utils/Crypto'
+import { UserRouterContext } from '@/types/UserRouterContext'
 
 @Controller
 @RequestMapping('user')
 export default class UserController {
   @AutoWired
   private userService: UserService
+  @Get('/')
+  public async getMyInfo (ctx: UserRouterContext) {
+    ctx.body = Result.success(await ctx.getUserInfo())
+  }
 
   @Get('/:id')
   public async getUser (ctx: RouterContext) {

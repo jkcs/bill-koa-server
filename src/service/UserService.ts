@@ -41,9 +41,10 @@ export default class UserService {
   }
 
   async loginByDeviceCode (deviceCode: string) {
-    const user = await User.build({ hash: hash(deviceCode) }).reload()
-    // user.then
-    console.log(user)
-    return user
+    return await User.findOne({
+      where: {
+        hash: hash(deviceCode)
+      }
+    })
   }
 }
