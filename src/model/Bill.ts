@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
-import sequelize from '@/src/sequelize'
+import sequelize from '@/src/sequelize/index'
 import Tag from '@/src/model/Tag'
 import User from '@/src/model/User'
 

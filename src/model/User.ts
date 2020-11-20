@@ -1,7 +1,16 @@
+import sequelize from '@/src/sequelize/index'
 import { DataTypes, Model } from 'sequelize'
-import sequelize from '@/src/sequelize'
 
 class User extends Model {
+  public id: number
+  public createdAt: number
+  public updatedAt: number
+  public hash:string
+  public username:string
+  public password:string
+  public avatar:string
+  public gender:number
+  public loginName:string
 }
 
 User.init({
@@ -9,6 +18,10 @@ User.init({
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
+  },
+  hash: {
+    type: DataTypes.STRING(64),
+    comment: '未登录用户唯一标识 (根据设备唯一标识生成，或为临时sessionId)'
   },
   username: {
     type: DataTypes.STRING,

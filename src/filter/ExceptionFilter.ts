@@ -12,8 +12,12 @@ module.exports = async (ctx: any, next: any) => {
       ctx.body = Result.noFoundError()
     }
   } catch (e) {
-    // 对接口异常进行捕获
-    ctx.body = Result.unknownError()
+    if (e.errno) {
+      ctx.body = Result.exception(e)
+    } else {
+      // 对接口异常进行捕获
+      ctx.body = Result.unknownError()
+    }
     console.error(e)
   }
 }

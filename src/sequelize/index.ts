@@ -1,8 +1,6 @@
 import { Sequelize } from 'sequelize'
 import Log from '@/core/model/log/Log'
 import YamlParse from '@/core/model/parse/YamlParse'
-// const { resolve } = require('path')
-// const glob = require('glob')
 let sequelize: Sequelize = null
 
 export default (function async () {

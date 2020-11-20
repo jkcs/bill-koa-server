@@ -23,15 +23,19 @@ export default class Result {
     return new Result(ErrorCode.ERROR, msg)
   }
 
+  public static exception (error: NodeJS.ErrnoException) {
+    return new Result(error.errno || ErrorCode.EXCEPTION, error.message)
+  }
+
   public static argError () {
     return new Result(ErrorCode.ARG_ERROR, '参数异常！')
   }
 
   public static unknownError () {
-    return new Result(ErrorCode.UNKNOWN_EXCEPTION, '未知错误，请稍后重试！')
+    return new Result(ErrorCode.UNKNOWN_EXCEPTION, '系统异常，请稍后重试！')
   }
 
-  public static noFoundError () {
-    return new Result(ErrorCode.NOT_FOUND_ERROR, '404 未找到该接口')
+  public static noFoundError (msg?: string) {
+    return new Result(ErrorCode.NOT_FOUND_ERROR, msg || '404 未找到该接口')
   }
 }

@@ -1,13 +1,11 @@
 /**
  * 所有过滤器都在此注册
  */
-
-let ExceptionFilter = require('./ExceptionFilter')
-// module.exports = async (ctx: any, next: any) => {
-//   await ExceptionFilter(ctx, next)
-// }
+const ExceptionFilter = require('./ExceptionFilter')
+const AuthFilter = require('./AuthFilter')
 
 const filter = async (ctx: any, next: any) => {
+  await AuthFilter(ctx, next)
   await ExceptionFilter(ctx, next)
 }
 
