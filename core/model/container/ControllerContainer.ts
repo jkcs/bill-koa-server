@@ -1,4 +1,5 @@
 import { Value } from '../../decorator/YamlDecorator'
+const cuid = require('cuid')
 const compose = require('koa-compose')
 
 /**
@@ -11,7 +12,10 @@ export default class ControllerContainer {
 
   static createRouter<T> (routerName: string): any {
     if (routerName && !ControllerContainer.hasRouter(routerName)) {
-      ControllerContainer.routerMap.set(routerName, require('koa-router')())
+      const router = require('koa-router')()
+      Reflect.defineMetadata(`uid`, cuid(), router)
+      Reflect.defineMetadata(`routes`, new WeakMap(), router)
+      ControllerContainer.routerMap.set(routerName, router)
     }
   }
 
