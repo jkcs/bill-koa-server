@@ -1,6 +1,7 @@
 import { Value } from '../../decorator/YamlDecorator'
 import { Manger } from '../../decorator/ContainerDecorator'
 import Log from '../log/Log'
+import LifeEventEmitter from '@/core/model/event/LifeEventEmitter'
 const glob = require('glob')
 const { resolve } = require('path')
 
@@ -24,6 +25,7 @@ export default class PackageManage {
       .forEach((item: any) => {
         require(item)
       })
-    Log.i('Scanning Packet Completion')
+    Log.i('Package scan complete!')
+    LifeEventEmitter.onPackageScanComplete()
   }
 }

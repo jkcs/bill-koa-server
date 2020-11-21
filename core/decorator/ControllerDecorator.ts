@@ -22,6 +22,7 @@ export function Get (url: string) {
     // 保存原函数
     const fn: any = descriptor.value
     const router: any = ControllerContainer.getRouter(target.constructor.name)
+    Reflect.getMetadata(`routes`, router).set(propertyKey, { url })
     router.get(url, fn.bind(target))
   }
 }
@@ -31,7 +32,7 @@ export function Post (url: string) {
     // 保存原函数
     let fn: any = descriptor.value
     let router: any = ControllerContainer.getRouter(target.constructor.name)
-    Reflect.getMetadata(`routes`, router).set(descriptor, url)
+    Reflect.getMetadata(`routes`, router).set(propertyKey, { url })
     router.post(url, fn.bind(target))
   }
 }
@@ -41,7 +42,7 @@ export function Put (url: string) {
     // 保存原函数
     let fn: any = descriptor.value
     let router: any = ControllerContainer.getRouter(target.constructor.name)
-    Reflect.getMetadata(`routes`, router).set(descriptor, url)
+    Reflect.getMetadata(`routes`, router).set(propertyKey, { url })
     router.put(url, fn.bind(target))
   }
 }
@@ -51,7 +52,7 @@ export function Delete (url: string) {
     // 保存原函数
     let fn: any = descriptor.value
     let router: any = ControllerContainer.getRouter(target.constructor.name)
-    Reflect.getMetadata(`routes`, router).set(descriptor, url)
+    Reflect.getMetadata(`routes`, router).set(propertyKey, { url })
     router.delete(url, fn.bind(target))
   }
 }

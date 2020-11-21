@@ -1,4 +1,5 @@
 import { Value } from '../../decorator/YamlDecorator'
+import AuthPathContainer from "@/core/model/container/AuthPathContainer"
 const cuid = require('cuid')
 const compose = require('koa-compose')
 
@@ -14,7 +15,7 @@ export default class ControllerContainer {
     if (routerName && !ControllerContainer.hasRouter(routerName)) {
       const router = require('koa-router')()
       Reflect.defineMetadata(`uid`, cuid(), router)
-      Reflect.defineMetadata(`routes`, new WeakMap(), router)
+      Reflect.defineMetadata(`routes`, new Map(), router)
       ControllerContainer.routerMap.set(routerName, router)
     }
   }
