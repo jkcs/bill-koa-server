@@ -6,12 +6,14 @@ import { RouterContext } from 'koa-router'
 import User from '@/src/model/User'
 import { encrypt, hash } from '@/src/utils/Crypto'
 import { UserRouterContext } from '@/types/UserRouterContext'
+import { Auth } from '@/core/decorator/AuthDecorator'
 
 @Controller
 @RequestMapping('user')
 export default class UserController {
   @AutoWired
   private userService: UserService
+  @Auth
   @Get('/')
   public async getMyInfo (ctx: UserRouterContext) {
     ctx.body = Result.success(await ctx.getUserInfo())
