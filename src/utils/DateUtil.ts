@@ -9,3 +9,14 @@ export function isStandardDate (str: string) {
     throw e
   }
 }
+
+export function getMonthSpan ():[Date, Date] {
+  const now = new Date()
+  now.setDate(1)
+  now.setHours(0)
+  now.setMinutes(0)
+  now.setSeconds(0)
+  const startTime = now.getTime()
+  now.setMonth(now.getMonth() + 1)
+  return [new Date(startTime), now]
+}
