@@ -6,6 +6,7 @@ declare namespace UserRouter{
     RouterContext<StateT, CustomT & IRouterUserContext<StateT, CustomT>>;
   export interface IRouterUserContext<StateT = any, CustomT = {}> {
     getUserInfo(): Promise<User>
+    getUserId(): number
   }
 }
 

@@ -2,6 +2,10 @@ import sequelize from '@/src/sequelize/index'
 import { DataTypes, Model } from 'sequelize'
 
 class Tag extends Model {
+  id: number
+  name: string
+  icon: string
+  type: 1|0
 }
 
 Tag.init({

@@ -12,9 +12,15 @@ module.exports = async (ctx: UserRouterContext, next: any) => {
   if (AuthPathContainer.Instance.has(ctx.request.url)) {
     const token = ctx.request.headers[Constant.TOKEN]
     if (token) {
+      ctx.getUserId = (): number => {
+        const id = Number(decrypt(token))
+        if (isNaN(id) || !id) throw new TokenInvalidException()
+        return id
+      }
       ctx.getUserInfo = async (): Promise<User> => {
         const userService = BeanContainer.Instance.getBean<UserService>(UserService.name)
-        const user:User = await userService.getUserById(Number(decrypt(token)))
+        const userId = ctx.getUserId()
+        const user:User = await userService.getUserById(userId)
         if (!user) throw new TokenInvalidException()
         return user
       }
