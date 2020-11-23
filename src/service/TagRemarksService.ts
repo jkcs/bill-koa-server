@@ -23,4 +23,24 @@ export default class TagRemarksService {
       }
     })
   }
+
+  async getRemarksByRemark (tagId: number, userId: number, remark: string) {
+    return await TagRemarks.findOne({
+      where: {
+        TagId: tagId,
+        UserId: userId,
+        remark
+      }
+    })
+  }
+
+  async findOrCreateRemarks (tagId: number, userId: number, remark: string) {
+    return await TagRemarks.findOrCreate({
+      where: {
+        TagId: tagId,
+        UserId: userId,
+        remark
+      }
+    })
+  }
 }

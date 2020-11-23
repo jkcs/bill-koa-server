@@ -27,8 +27,8 @@ export default class Result {
     return new Result(error.errno || ErrorCode.EXCEPTION, message || error.message)
   }
 
-  public static argError () {
-    return new Result(ErrorCode.ARG_ERROR, '参数异常！')
+  public static argError (msg?: string) {
+    return new Result(ErrorCode.ARG_ERROR, msg || '参数异常！')
   }
 
   public static unknownError () {

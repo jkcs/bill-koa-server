@@ -8,14 +8,25 @@ declare namespace MVC {
   export abstract class BaseUserModel<StateT = any, CustomT = {}> extends Model<StateT, CustomT> {
     userId?: number
   }
-  export type BillParams = {
-    id?: number,
-    userId?: number,
-    type: 1 | 0,
-    amount: string | Decimal,
+  export type BillSearchParams = {
+    userId: number,
+    startTime?: Date,
+    type?: 1|0,
+    endTime?: Date,
+    tagId?: number,
+    endId?: number,
+    size?: number
+  }
+  export type BillResult = {
+    id: number,
+    userId: number,
+    type: 1|0,
+    amount: Decimal,
     tagId: number,
-    tagRemark?: string,
-    tagRemarkId?: number
+    tagName: string,
+    tagIcon: string,
+    tagRemarkId: number,
+    remark: string
   }
 }
 

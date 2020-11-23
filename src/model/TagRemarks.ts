@@ -4,6 +4,8 @@ import User from '@/src/model/User'
 import Tag from '@/src/model/Tag'
 
 class TagRemarks extends Model {
+  id: number
+  remark: string
 }
 
 TagRemarks.init({

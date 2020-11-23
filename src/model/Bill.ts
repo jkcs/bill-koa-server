@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Sequelize } from 'sequelize'
 import sequelize from '@/src/sequelize/index'
 import Tag from '@/src/model/Tag'
 import User from '@/src/model/User'
@@ -22,6 +22,13 @@ Bill.init({
     type: DataTypes.DECIMAL,
     allowNull: false,
     comment: '金额'
+  },
+  billTime: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.fn('NOW'),
+    // defaultValue: Sequelize.NOW,
+    comment: '账生成时间'
   }
 }, { sequelize })
 

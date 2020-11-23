@@ -1,9 +1,11 @@
 import { Model } from 'sequelize'
+import Decimal from 'decimal.js'
 
 const typeObj: any = {
   Array: 'Array',
   Object: 'Object',
   String: 'String',
+  Number: 'Number',
   Undefined: void 0
 }
 export function cached (fn: Function): Function {
@@ -42,6 +44,11 @@ export const isEmpty = (arg: any): boolean => {
         ? false
         : !arg
   }
+}
+
+export const isNumber = (num: any): boolean => {
+  if (num instanceof Decimal) return true
+  return !isNaN(num) && _toString(num) === typeObj.Number
 }
 
 export const isEmptyArray = (arr: any[]): boolean => {
