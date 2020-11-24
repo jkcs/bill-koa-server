@@ -8,7 +8,7 @@ import TagRemarksService from '@/src/service/TagRemarksService'
 import { AutoWired } from '@/core/decorator/ContainerDecorator'
 import Bill from '@/src/model/Bill'
 import BillService from '@/src/service/BillService'
-import { getMonthSpan, isStandardDate } from '@/src/utils/DateUtil'
+import { formatDate, getMonthSpanDate, isStandardDate } from '@/src/utils/DateUtil'
 import { BillSearchParams } from '@/types/MVC'
 
 /**
@@ -71,11 +71,14 @@ export default class BillController {
     ctx.body = Result.success(result)
   }
 
-  @Post('/monthList')
+  @Get('/monthList')
   public async monthList (ctx: UserRouterContext) {
     const userId = ctx.getUserId()
+    const { month } = ctx.query
     const { tagId, endId, size, type }: BillSearchParams = ctx.request.body
-    const [startTime, endTime] = getMonthSpan()
+    let [startTime, endTime] = getMonthSpanDate(Number(month))
+    startTime = formatDate(startTime)
+    endTime = formatDate(endTime)
     const result = await this.billService.getBillList({
       userId, type, startTime, endTime, tagId, endId, size
     })

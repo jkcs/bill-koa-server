@@ -1,4 +1,6 @@
 // import moment from 'moment'
+import { isNumber } from '@/src/utils/Utils'
+
 let moment = require('moment')
 export const standardDate = 'YYYY-MM-DD'
 export const standardTime = 'HH:mm:ss'
@@ -11,8 +13,13 @@ export function isStandardDate (str: string) {
   }
 }
 
-export function getMonthSpan ():[Date, Date] {
+export function formatDate (date: Date) {
+  return moment(date).format(standard)
+}
+
+export function getMonthSpanDate (month?: number):[Date, Date] {
   const now = new Date()
+  if (month && isNumber(month)) now.setMonth(month - 1)
   now.setDate(1)
   now.setHours(0)
   now.setMinutes(0)
