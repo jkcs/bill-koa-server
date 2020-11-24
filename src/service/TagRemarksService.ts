@@ -36,11 +36,7 @@ export default class TagRemarksService {
 
   async findOrCreateRemarks (tagId: number, userId: number, remark: string) {
     return await TagRemarks.findOrCreate({
-      where: {
-        TagId: tagId,
-        UserId: userId,
-        remark
-      }
+      where: { tagId, userId, remark }
     })
   }
 }

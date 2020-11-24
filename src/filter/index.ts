@@ -4,6 +4,7 @@ import Log from '@/core/model/log/Log'
 
 /**
  * 所有过滤器都在此注册
+ * TODO: 防sql注入过滤器
  */
 const ExceptionFilter = require('./ExceptionFilter')
 const AuthFilter = require('./AuthFilter')

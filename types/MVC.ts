@@ -26,7 +26,9 @@ declare namespace MVC {
     tagName: string,
     tagIcon: string,
     tagRemarkId: number,
-    remark: string
+    remark: string,
+    createdAt: string,
+    updatedAt: string
   }
 }
 

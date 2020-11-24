@@ -25,9 +25,8 @@ export default (function async () {
   sequelize.authenticate()
     .then(r => {
       Log.i('MySQL connection succeeded')
-      // const isProduction = process.env.NODE_ENV === 'production'
+      // Don't expect it to build good tables
       // sequelize.sync({ alter: true, force: false })
-      // Log.i(`sync ${database} tables...`)
     }).catch(error => {
       Log.e(`Unable to connect to the database:${error}`)
     })

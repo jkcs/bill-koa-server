@@ -31,7 +31,7 @@ export default class BillController {
   public async add (ctx: UserRouterContext) {
     const userId = ctx.getUserId()
     let { id, type, amount, tagId, tagRemarksId, remarks, billTime } = ctx.request.body
-    const buildObj: any = { UserId: userId }
+    const buildObj: any = { userId }
     if (![1, 0].includes(type)) {
       ctx.body = Result.argError()
       return
@@ -44,7 +44,7 @@ export default class BillController {
       ctx.body = Result.argError('请选择一个tag')
       return
     }
-    if (!billTime || isStandardDate(billTime)) {
+    if (!billTime || !isStandardDate(billTime)) {
       ctx.body = Result.argError('请填写记账时间')
       return
     }
@@ -53,12 +53,14 @@ export default class BillController {
     }
     buildObj.id = id || undefined
     buildObj.type = type
+    buildObj.tagId = tagId
     buildObj.billTime = billTime
     buildObj.amount = new Decimal(amount)
-    ctx.body = Result.success(await this.billService.addBill(Bill.build(buildObj)))
+    let bill = await this.billService.addBill(Bill.build(buildObj))
+    ctx.body = Result.success(bill)
   }
 
-  @Get('/list')
+  @Post('/list')
   public async list (ctx: UserRouterContext) {
     const userId = ctx.getUserId()
     const { startTime, endTime, tagId, endId, size, type }: BillSearchParams = ctx.request.body
@@ -69,7 +71,7 @@ export default class BillController {
     ctx.body = Result.success(result)
   }
 
-  @Get('/monthList')
+  @Post('/monthList')
   public async monthList (ctx: UserRouterContext) {
     const userId = ctx.getUserId()
     const { tagId, endId, size, type }: BillSearchParams = ctx.request.body

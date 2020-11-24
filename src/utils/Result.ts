@@ -16,7 +16,7 @@ export default class Result {
   }
 
   public static success (data?: any, msg?: string) {
-    return new Result(ErrorCode.SUCCESS, msg, data)
+    return new Result(ErrorCode.SUCCESS, msg || 'success', data)
   }
 
   public static error (msg?: any) {

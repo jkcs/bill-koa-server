@@ -9,7 +9,9 @@ import AuthPathContainer from '@/core/model/container/AuthPathContainer'
 import UserRouterContext = UserRouter.UserRouterContext
 
 module.exports = async (ctx: UserRouterContext, next: any) => {
-  if (AuthPathContainer.Instance.has(ctx.request.url)) {
+  const index = ctx.request.url.indexOf('?')
+  const prefix = index === -1 ? ctx.request.url : ctx.request.url.substring(0, index)
+  if (AuthPathContainer.Instance.has(prefix)) {
     const token = ctx.request.headers[Constant.TOKEN]
     if (token) {
       ctx.getUserId = (): number => {

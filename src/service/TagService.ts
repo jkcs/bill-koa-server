@@ -26,23 +26,22 @@ export default class TagService {
     const tagRemarksList = await this.tagRemarksService.getTagRemarksListByUserId(userId)
     const list:any[] = []
     tagRemarksList.forEach(tagRemarks => {
-      let index = list.findIndex(item => item.tagId === tagRemarks.getDataValue('TagId'))
+      let index = list.findIndex(item => item.tagId === tagRemarks.getDataValue('tagId'))
       if (index !== -1) {
-        list[index].remarks.push({ ...tagRemarks })
+        list[index].remarks.push({ ...tagRemarks.get() })
       } else {
         list.push({
-          tagId: tagRemarks.getDataValue('TagId'),
-          remarks: [{ ...tagRemarks }]
+          tagId: tagRemarks.getDataValue('tagId'),
+          remarks: [{ ...tagRemarks.get() }]
         })
       }
     })
-    tags.map(tag => {
+    return tags.map(tag => {
       const find = list.find(t => t.tagId === tag.id)
       return {
-        ...tag,
+        ...tag.get(),
         remarks: find ? find.remarks : []
       }
     })
-    return tags
   }
 }

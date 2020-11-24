@@ -51,6 +51,11 @@ export const isNumber = (num: any): boolean => {
   return !isNaN(num) && _toString(num) === typeObj.Number
 }
 
+export const isBool = (num: any): boolean => {
+  if (isEmpty(num)) return false
+  return [1, 0].includes(Number(num))
+}
+
 export const isEmptyArray = (arr: any[]): boolean => {
   return arr.length === 0
 }

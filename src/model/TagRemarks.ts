@@ -20,7 +20,7 @@ TagRemarks.init({
   }
 }, { sequelize, tableName: 'tag_remarks' })
 
-TagRemarks.belongsTo(User)
-TagRemarks.belongsTo(Tag)
+TagRemarks.belongsTo(User, { foreignKey: 'userId' })
+TagRemarks.belongsTo(Tag, { foreignKey: 'tagId' })
 
 export default TagRemarks

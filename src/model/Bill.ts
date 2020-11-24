@@ -32,7 +32,7 @@ Bill.init({
   }
 }, { sequelize })
 
-Bill.belongsTo(Tag)
-Bill.belongsTo(User)
+Bill.belongsTo(Tag, { foreignKey: 'tagId' })
+Bill.belongsTo(User, { foreignKey: 'userId' })
 
 export default Bill

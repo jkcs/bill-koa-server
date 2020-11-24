@@ -1,10 +1,11 @@
-import moment from 'moment'
+// import moment from 'moment'
+let moment = require('moment')
 export const standardDate = 'YYYY-MM-DD'
 export const standardTime = 'HH:mm:ss'
 export const standard = standardDate + ' ' + standardTime
 export function isStandardDate (str: string) {
   try {
-    return !!moment(str, standardDate)
+    return moment(str).isValid()
   } catch (e) {
     throw e
   }
