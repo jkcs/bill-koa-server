@@ -13,8 +13,8 @@ export function isStandardDate (str: string) {
   }
 }
 
-export function formatDate (date: Date) {
-  return moment(date).format(standard)
+export function formatDate (inp: any, formatStr?: string) {
+  return moment(inp).format(formatStr || standard)
 }
 
 export function getMonthSpanDate (month?: number):[Date, Date] {
@@ -26,5 +26,21 @@ export function getMonthSpanDate (month?: number):[Date, Date] {
   now.setSeconds(0)
   const startTime = now.getTime()
   now.setMonth(now.getMonth() + 1)
+  return [new Date(startTime), now]
+}
+
+export function getYearMonthSpanDate (year:number, month?:number):[Date, Date] {
+  const now = new Date()
+  if (year && isNumber(year)) {
+    now.setFullYear(year)
+    now.setMonth(0)
+  }
+  if (month && isNumber(month)) now.setMonth(Number(month) - 1)
+  now.setDate(1)
+  now.setHours(0)
+  now.setMinutes(0)
+  now.setSeconds(0)
+  const startTime = now.getTime()
+  now.setMonth(now.getMonth() + 12)
   return [new Date(startTime), now]
 }

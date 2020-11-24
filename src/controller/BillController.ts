@@ -32,6 +32,7 @@ export default class BillController {
     const userId = ctx.getUserId()
     let { id, type, amount, tagId, tagRemarksId, remarks, billTime } = ctx.request.body
     const buildObj: any = { userId }
+    let bill: Bill
     if (![1, 0].includes(type)) {
       ctx.body = Result.argError()
       return
@@ -56,7 +57,7 @@ export default class BillController {
     buildObj.tagId = tagId
     buildObj.billTime = billTime
     buildObj.amount = new Decimal(amount)
-    let bill = await this.billService.addBill(Bill.build(buildObj))
+    bill = await this.billService.addOrUpdateBill(Bill.build(buildObj))
     ctx.body = Result.success(bill)
   }
 
@@ -83,5 +84,14 @@ export default class BillController {
       userId, type, startTime, endTime, tagId, endId, size
     })
     ctx.body = Result.success(result)
+  }
+
+  @Post('/rank')
+  public async rank (ctx: UserRouterContext) {
+    const list = await this.billService.queryBillRank({
+      userId: 1
+    })
+    console.log(list)
+    ctx.body = Result.success(list)
   }
 }

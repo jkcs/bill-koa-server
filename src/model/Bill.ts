@@ -2,8 +2,13 @@ import { DataTypes, Model, Sequelize } from 'sequelize'
 import sequelize from '@/src/sequelize/index'
 import Tag from '@/src/model/Tag'
 import User from '@/src/model/User'
+import { Decimal } from 'decimal.js'
 
 class Bill extends Model {
+  id: number
+  type: number
+  amount: Decimal
+  billTime: string|Date
 }
 
 Bill.init({
