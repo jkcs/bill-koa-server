@@ -45,7 +45,7 @@ export default class BillService {
         ${Number(endId) ? `AND b.id < ${endId}` : ''}
       ORDER BY
         b.billTime DESC,
-        b.updatedAt DESC
+        b.createdAt DESC
         ${size ? `LIMIT ${size}` : ''}
     `, { type: QueryTypes.SELECT })
     return result
