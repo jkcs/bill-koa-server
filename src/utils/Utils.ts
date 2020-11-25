@@ -46,6 +46,13 @@ export const isEmpty = (arg: any): boolean => {
   }
 }
 
+export const isRealNumber = (num: any): boolean => {
+  if (num instanceof Decimal) return true
+  if (num == null) return false
+  if (_toString(num) === typeObj.Number) return true
+  return !isNaN(Number(num))
+}
+
 export const isNumber = (num: any): boolean => {
   if (num instanceof Decimal) return true
   return !isNaN(num) && _toString(num) === typeObj.Number

@@ -7,9 +7,10 @@ import { Op, QueryTypes, Sequelize } from 'sequelize'
 import { BillResult, BillSearchParams, BillSumParams, BillTrendGroup } from '@/types/MVC'
 import sequelize from '@/src/sequelize/index'
 import { Service } from '@/core/decorator/ContainerDecorator'
-import { injectModel, isBool } from '@/src/utils/Utils'
+import { injectModel, isBool, isRealNumber } from '@/src/utils/Utils'
 import { BillTrendGroupValeStandard, BillTrendName, BillTrendUnit, standardDate } from '@/src/utils/DateUtil'
 import Decimal from 'decimal.js'
+import SQLInjectException from '@/src/exception/SQLInjectException'
 const moment = require('moment')
 
 @Service
@@ -26,7 +27,7 @@ export default class BillService {
 
   async getBillList (params: BillSearchParams) {
     const { userId, tagId, startTime, endTime, endId, size, type } = params
-
+    if (!isRealNumber(size)) throw new SQLInjectException()
     const result:BillResult[] = await sequelize.query(`
       SELECT
         b.id id,
@@ -46,12 +47,12 @@ export default class BillService {
         INNER JOIN tag t ON t.id = b.TagId
         LEFT JOIN tag_remarks tr ON tr.id = b.tagRemarksId
       WHERE
-        b.userId = ${userId}
-        ${tagId ? `AND b.tagId = ${tagId}` : ''}
-        ${startTime ? `AND b.billTime>= '${startTime}'` : ''}
-        ${endTime ? `AND b.billTime< '${endTime}'` : ''}
-        ${isBool(type) ? `AND b.type = ${type}` : ''}
-        ${Number(endId) ? `AND b.id < ${endId}` : ''}
+        b.userId = ${sequelize.escape(userId)}
+        ${tagId ? `AND b.tagId = ${sequelize.escape(tagId)}` : ''}
+        ${startTime ? `AND b.billTime>= ${sequelize.escape(startTime)}` : ''}
+        ${endTime ? `AND b.billTime< ${sequelize.escape(endTime)}` : ''}
+        ${isBool(type) ? `AND b.type = ${sequelize.escape(type)}` : ''}
+        ${Number(endId) ? `AND b.id < ${sequelize.escape(endId)}` : ''}
       ORDER BY
         b.billTime DESC,
         b.createdAt DESC
@@ -143,11 +144,11 @@ export default class BillService {
         INNER JOIN tag t ON t.id = b.TagId
         LEFT JOIN tag_remarks tr ON tr.id = b.tagRemarksId
       WHERE
-        b.userId = ${userId}
-        ${tagId ? `AND b.tagId = ${tagId}` : ''}
-        ${startTime ? `AND b.billTime>= '${startTime}'` : ''}
-        ${endTime ? `AND b.billTime< '${endTime}'` : ''}
-        ${isBool(type) ? `AND b.type = ${type}` : ''}
+        b.userId = ${sequelize.escape(userId)}
+        ${tagId ? `AND b.tagId = ${sequelize.escape(tagId)}` : ''}
+        ${startTime ? `AND b.billTime>= ${sequelize.escape(startTime)}` : ''}
+        ${endTime ? `AND b.billTime< ${sequelize.escape(endTime)}` : ''}
+        ${isBool(type) ? `AND b.type = ${sequelize.escape(type)}` : ''}
       ORDER BY
         b.amount DESC`, { type: QueryTypes.SELECT })
   }

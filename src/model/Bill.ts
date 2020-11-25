@@ -40,6 +40,6 @@ Bill.init({
 
 Bill.belongsTo(Tag, { foreignKey: 'tagId' })
 Bill.belongsTo(User, { foreignKey: 'userId' })
-Bill.belongsTo(TagRemarks, { foreignKey: 'tagRemarksId' })
+Bill.belongsTo(TagRemarks, { foreignKey: 'tagRemarksId', as: 'tr' })
 
 export default Bill
