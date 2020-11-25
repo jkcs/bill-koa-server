@@ -15,7 +15,8 @@ declare namespace MVC {
     endTime?: Date,
     tagId?: number,
     endId?: number,
-    size?: number
+    size?: number,
+    group?: BillTrendGroup
   }
   export type BillSumParams = {
     startTime?: Date,
@@ -43,7 +44,8 @@ declare namespace MVC {
     name: string,
     value: any,
     group: string,
-    groupValue: string
+    groupValue: string,
+    ranks: BillResult[]
   }
 
   export type BillTrendGroup = 'days'|'weeks'|'months'

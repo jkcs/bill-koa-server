@@ -9,7 +9,7 @@ import { AutoWired } from '@/core/decorator/ContainerDecorator'
 import Bill from '@/src/model/Bill'
 import BillService from '@/src/service/BillService'
 import { formatDate, getMonthSpanDate, isStandardDate } from '@/src/utils/DateUtil'
-import { BillSearchParams } from '@/types/MVC'
+import { BillSearchParams, BillTrendGroup } from '@/types/MVC'
 const xss = require('xss')
 /**
  * @author lw
@@ -99,10 +99,15 @@ export default class BillController {
   @Post('/trend')
   public async trend (ctx: UserRouterContext) {
     const userId = ctx.getUserId()
-    const { startTime, endTime, tagId, endId, size, type }: BillSearchParams = ctx.request.body
+    const { startTime, endTime, tagId, endId, size, type, group }: BillSearchParams = ctx.request.body
+    if (!['days', 'weeks', 'months'].includes(group)) {
+      ctx.body = Result.argError()
+      return
+    }
     const trend = await this.billService.queryBillTrend({
       userId, startTime, endTime, tagId, endId, size, type
-    }, 'days')
+    }, group)
+
     ctx.body = Result.success(trend)
   }
 }

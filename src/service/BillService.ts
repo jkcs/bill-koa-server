@@ -8,7 +8,7 @@ import { BillResult, BillSearchParams, BillSumParams, BillTrendGroup } from '@/t
 import sequelize from '@/src/sequelize/index'
 import { Service } from '@/core/decorator/ContainerDecorator'
 import { injectModel, isBool } from '@/src/utils/Utils'
-import { BillTrendName, BillTrendUnit, standardDate } from '@/src/utils/DateUtil'
+import { BillTrendGroupValeStandard, BillTrendName, BillTrendUnit, standardDate } from '@/src/utils/DateUtil'
 import Decimal from 'decimal.js'
 const moment = require('moment')
 
@@ -90,23 +90,25 @@ export default class BillService {
     let average: Decimal
     for (let i = 0; i <= duration; i++) {
       const name = startMoment.format(BillTrendName[group])
-      const groupValue = startMoment.format(standardDate)
+      const groupValue = startMoment.format(BillTrendGroupValeStandard[group])
       charts.push({
         name,
         value: new Decimal(0),
         group,
-        groupValue
+        groupValue,
+        ranks: []
       })
       startMoment.add(1, BillTrendUnit[group])
     }
     ranks.forEach((item:BillResult) => {
       sum = sum.plus(item.amount)
-      const findIndex = charts.findIndex(c => c.groupValue === moment(item.billTime).format(standardDate))
+      const findIndex = charts.findIndex(c => c.groupValue === moment(item.billTime).format(BillTrendGroupValeStandard[group]))
       if (findIndex !== -1) {
         charts[findIndex].value = charts[findIndex].value.plus(item.amount)
+        if (charts[findIndex].ranks.length !== 3) charts[findIndex].ranks.push(item)
       }
     })
-    average = sum.div(duration).toDP(2)
+    average = sum.div(duration || 1).toDP(2)
     return {
       charts, ranks, sum, average
     }

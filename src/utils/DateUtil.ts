@@ -1,16 +1,21 @@
-// import moment from 'moment'
 import { isNumber } from '@/src/utils/Utils'
-import {BillTrendGroup} from "@/types/MVC"
 
 let moment = require('moment')
 export const standardDate = 'YYYY-MM-DD'
+export const standardWeek = 'YYYY-MM-ww'
 export const standardTime = 'HH:mm:ss'
 export const standard = standardDate + ' ' + standardTime
 
 export const BillTrendName = {
   'days': 'MM-DD',
-  'weeks': 'DD',
+  'weeks': 'D',
   'months': 'M月'
+}
+
+export const BillTrendGroupValeStandard = {
+  'days': standardDate,
+  'weeks': standardWeek,
+  'months': 'YYYY-MM'
 }
 
 export const BillTrendUnit = {
