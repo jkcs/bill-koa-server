@@ -10,7 +10,7 @@ import Bill from '@/src/model/Bill'
 import BillService from '@/src/service/BillService'
 import { formatDate, getMonthSpanDate, isStandardDate } from '@/src/utils/DateUtil'
 import { BillSearchParams } from '@/types/MVC'
-
+const xss = require('xss')
 /**
  * @author lw
  * @date 2020/11/23
@@ -50,9 +50,11 @@ export default class BillController {
       return
     }
     if (remarks && !tagRemarksId) {
-      await this.tagRemarksService.findOrCreateRemarks(tagId, userId, remarks.trim())
+      const [tagRemarks] = await this.tagRemarksService.findOrCreateRemarks(tagId, userId, xss(remarks.trim()))
+      buildObj.tagRemarksId = tagRemarks.id
     }
     buildObj.id = id || undefined
+    buildObj.tagRemarksId = tagRemarksId || undefined
     buildObj.type = type
     buildObj.tagId = tagId
     buildObj.billTime = billTime
@@ -91,7 +93,16 @@ export default class BillController {
     const list = await this.billService.queryBillRank({
       userId: 1
     })
-    console.log(list)
     ctx.body = Result.success(list)
+  }
+
+  @Post('/trend')
+  public async trend (ctx: UserRouterContext) {
+    const userId = ctx.getUserId()
+    const { startTime, endTime, tagId, endId, size, type }: BillSearchParams = ctx.request.body
+    const trend = await this.billService.queryBillTrend({
+      userId, startTime, endTime, tagId, endId, size, type
+    }, 'days')
+    ctx.body = Result.success(trend)
   }
 }

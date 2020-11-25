@@ -46,7 +46,7 @@ declare namespace MVC {
     groupValue: string
   }
 
-  export type BillTrendGroup = 'week'|'month'|'year'
+  export type BillTrendGroup = 'days'|'weeks'|'months'
 
   export type BillTrendResult = {
     average: Decimal,

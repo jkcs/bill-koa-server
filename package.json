@@ -36,6 +36,7 @@
     "pug": "^2.0.0-rc.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.3.5",
+    "xss": "^1.0.8",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

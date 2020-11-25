@@ -8,8 +8,9 @@ import { BillResult, BillSearchParams, BillSumParams, BillTrendGroup } from '@/t
 import sequelize from '@/src/sequelize/index'
 import { Service } from '@/core/decorator/ContainerDecorator'
 import { injectModel, isBool } from '@/src/utils/Utils'
-import {formatDate} from "@/src/utils/DateUtil"
-import Decimal from "decimal.js"
+import { BillTrendName, BillTrendUnit, standardDate } from '@/src/utils/DateUtil'
+import Decimal from 'decimal.js'
+const moment = require('moment')
 
 @Service
 export default class BillService {
@@ -43,7 +44,7 @@ export default class BillService {
       FROM
         bill b 
         INNER JOIN tag t ON t.id = b.TagId
-        INNER JOIN tag_remarks tr ON tr.id = t.id
+        LEFT JOIN tag_remarks tr ON tr.id = b.tagRemarksId
       WHERE
         b.userId = ${userId}
         ${tagId ? `AND b.tagId = ${tagId}` : ''}
@@ -77,32 +78,38 @@ export default class BillService {
     })
   }
 
-  async queryTrendBill (params: any) {
-    return ''
-  }
-
   async queryBillTrend (params: any, group: BillTrendGroup) {
+    const { startTime, endTime } = params
     let ranks: object[] = await this.queryBillRank(params)
-    if (group === 'week') {
-      // 按日切片
-      const charts: any[] = []
-      ranks.forEach((item:BillResult) => {
-        let findIndex = charts.findIndex(item => item.groupValue === item.billTime)
-        if (findIndex !== -1) {
-          charts[findIndex].amount = charts[findIndex].amount.plus(item.amount)
-        } else {
-          charts.push({
-            name: formatDate(item.billTime, 'MM-DD'),
-            value: new Decimal(item.amount),
-            group: group,
-            groupValue: item.billTime
-          })
-        }
-
+    // 按group切片
+    const startMoment = moment(startTime)
+    const endMoment = moment(endTime)
+    const duration = endMoment.diff(startMoment, group)
+    const charts: any[] = []
+    let sum = new Decimal(0)
+    let average: Decimal
+    for (let i = 0; i <= duration; i++) {
+      const name = startMoment.format(BillTrendName[group])
+      const groupValue = startMoment.format(standardDate)
+      charts.push({
+        name,
+        value: new Decimal(0),
+        group,
+        groupValue
       })
-      // ranks.
+      startMoment.add(1, BillTrendUnit[group])
     }
-    // console.log(ranks)
+    ranks.forEach((item:BillResult) => {
+      sum = sum.plus(item.amount)
+      const findIndex = charts.findIndex(c => c.groupValue === moment(item.billTime).format(standardDate))
+      if (findIndex !== -1) {
+        charts[findIndex].value = charts[findIndex].value.plus(item.amount)
+      }
+    })
+    average = sum.div(duration).toDP(2)
+    return {
+      charts, ranks, sum, average
+    }
   }
 
   async queryBillRank (params: any) {
@@ -115,7 +122,8 @@ export default class BillService {
     }
     if (startTime) where.billTime[Op.gte] = startTime
     if (endTime) where.billTime[Op.lt] = endTime
-    return await sequelize.query(`SELECT
+    return await sequelize.query(`
+    SELECT
         b.id id,
         b.userId userId,
         b.type type,
@@ -131,7 +139,7 @@ export default class BillService {
       FROM
         bill b 
         INNER JOIN tag t ON t.id = b.TagId
-        INNER JOIN tag_remarks tr ON tr.id = t.id
+        LEFT JOIN tag_remarks tr ON tr.id = b.tagRemarksId
       WHERE
         b.userId = ${userId}
         ${tagId ? `AND b.tagId = ${tagId}` : ''}

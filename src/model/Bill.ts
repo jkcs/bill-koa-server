@@ -3,6 +3,7 @@ import sequelize from '@/src/sequelize/index'
 import Tag from '@/src/model/Tag'
 import User from '@/src/model/User'
 import { Decimal } from 'decimal.js'
+import TagRemarks from '@/src/model/TagRemarks'
 
 class Bill extends Model {
   id: number
@@ -39,5 +40,6 @@ Bill.init({
 
 Bill.belongsTo(Tag, { foreignKey: 'tagId' })
 Bill.belongsTo(User, { foreignKey: 'userId' })
+Bill.belongsTo(TagRemarks, { foreignKey: 'tagRemarksId' })
 
 export default Bill
