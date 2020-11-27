@@ -87,4 +87,11 @@ export default class UserController {
     }
     ctx.body = Result.error('用户名或密码错误')
   }
+
+  @Post('/register/login')
+  public async registerAndLogin (ctx: RouterContext) {
+    let { code, hash } = await this.userService.generateHash()
+    const user = await User.create({ hash: hash })
+    ctx.body = Result.success({ code, user }, encrypt(String(user.id)))
+  }
 }

@@ -1,12 +1,15 @@
 import User from '../model/User'
 import { Service } from '@/core/decorator/ContainerDecorator'
-import { hash } from '@/src/utils/Crypto'
+import { hash, randomHash } from '@/src/utils/Crypto'
 import CantNotUpdateException from '@/src/exception/CantNotUpdateException'
 import BusinessException from '@/src/exception/BusinessException'
 import { injectModel } from '@/src/utils/Utils'
 
 @Service
 export default class UserService {
+  private tryGenerateHashNum:number = 6
+  private randomHashLength:number = 6
+
   async getUserByHash (hash: string) {
     return await User.findOne({
       where: { hash }
@@ -54,5 +57,20 @@ export default class UserService {
         hash: hash(deviceCode)
       }
     })
+  }
+
+  async generateHash () {
+    const [code, hash] = randomHash(this.randomHashLength)
+    let num = this.tryGenerateHashNum
+    while (num) {
+      if (!await this.getUserByHash(hash)) {
+        return {
+          code,
+          hash
+        }
+      }
+      --num
+    }
+    throw new BusinessException('网络繁忙，请尝试重新生成！')
   }
 }

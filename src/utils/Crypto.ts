@@ -12,3 +12,8 @@ export function encrypt (str: string): string {
 export function decrypt (str: string): string {
   return CryptoJS.AES.decrypt(str, Constant.SECRET).toString(CryptoJS.enc.Utf8)
 }
+
+export function randomHash (n: number): [number, string] {
+  const random = parseInt(String(Math.random() * Math.pow(10, n)))
+  return [random, hash(String(random))]
+}
