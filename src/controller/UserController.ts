@@ -56,7 +56,18 @@ export default class UserController {
       return
     }
     user = await this.userService.addOrUpdateUser(User.build(), String(deviceId))
-    ctx.body = Result.success(user, user.hash)
+    ctx.body = Result.success(user, encrypt(String(user.id)))
+  }
+
+  @Post('/findOrCreate')
+  public async findOrCreate (ctx: RouterContext) {
+    const { deviceId } = ctx.request.body
+    if (!deviceId) {
+      ctx.body = Result.argError()
+      return
+    }
+    const [user] = await this.userService.findOrCreate(String(deviceId))
+    ctx.body = Result.success(user, encrypt(String(user.id)))
   }
 
   @Post('/login')

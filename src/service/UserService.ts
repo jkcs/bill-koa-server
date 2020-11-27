@@ -47,4 +47,12 @@ export default class UserService {
       }
     })
   }
+
+  async findOrCreate (deviceCode: string) {
+    return await User.findOrCreate({
+      where: {
+        hash: hash(deviceCode)
+      }
+    })
+  }
 }
